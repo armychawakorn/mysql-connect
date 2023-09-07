@@ -1,5 +1,7 @@
+import java.sql.SQLException;
+
 public class Main {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		MemberDB mdb = new MemberDB();
 		System.out.print("Find All: \n");
 		mdb.FindAll().DisplayData();

@@ -10,53 +10,41 @@ public class MemberDB {
 	private Connection con;
 	private List<List<String>> DatabaseData = null;
 	private String dbURL = "jdbc:mysql://localhost/blueshop?characterEncoding=utf-8";
-	public MemberDB() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		}catch(ClassNotFoundException e) {
-			System.err.println("Error loading driver: " + e);
-		}
+	public MemberDB() throws ClassNotFoundException {
+		Class.forName("com.mysql.cj.jdbc.Driver");
 	}
-	public MemberDB FindAll() {
+	public MemberDB FindAll() throws SQLException {
 		List<List<String>> sql = new ArrayList<List<String>>();
-		try {
-			con = DriverManager.getConnection(dbURL, "root", "");
-			PreparedStatement pStatement = con.prepareStatement("SELECT * FROM member");
-			ResultSet resultSet = pStatement.executeQuery();
-			while (resultSet.next()) {
-				List<String> sqlData = new ArrayList<String>();
-				for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-					sqlData.add(resultSet.getString(i));
-				}
-				sql.add(sqlData);
+		con = DriverManager.getConnection(dbURL, "root", "");
+		PreparedStatement pStatement = con.prepareStatement("SELECT * FROM member");
+		ResultSet resultSet = pStatement.executeQuery();
+		while (resultSet.next()) {
+			List<String> sqlData = new ArrayList<String>();
+			for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+				sqlData.add(resultSet.getString(i));
 			}
-		}catch (SQLException e) {
-			System.err.println("Error database connection: " + e);
+			sql.add(sqlData);
 		}
 		DatabaseData = sql;
 		return this;
 	}
-	public MemberDB FindOne(String username) {
+	public MemberDB FindOne(String username) throws SQLException {
 		List<List<String>> sql = new ArrayList<List<String>>();
-		try {
-			con = DriverManager.getConnection(dbURL, "root", "");
-			PreparedStatement pStatement = con.prepareStatement("SELECT * FROM member WHERE username = ?");
-			pStatement.setString(1, username);
-			ResultSet resultSet = pStatement.executeQuery();
-			while (resultSet.next()) {
-				List<String> sqlData = new ArrayList<String>();
-				for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-					sqlData.add(resultSet.getString(i));
-				}
-				sql.add(sqlData);
+		con = DriverManager.getConnection(dbURL, "root", "");
+		PreparedStatement pStatement = con.prepareStatement("SELECT * FROM member WHERE username = ?");
+		pStatement.setString(1, username);
+		ResultSet resultSet = pStatement.executeQuery();
+		while (resultSet.next()) {
+			List<String> sqlData = new ArrayList<String>();
+			for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+				sqlData.add(resultSet.getString(i));
 			}
-		}catch (SQLException e) {
-			System.err.println("Error database connection: " + e);
+			sql.add(sqlData);
 		}
 		DatabaseData = sql;
 		return this;
 	}
-	public void DisplayData() {
+	public void DisplayData() throws SQLException {
 		if(this.DatabaseData.toArray().length <= 0) {
 			System.out.println("Empty");
 			return;
@@ -64,10 +52,6 @@ public class MemberDB {
 		for(List<String> data : this.DatabaseData) {
 			System.out.println(data);
 		}
-		try {
-			this.con.close();
-		}catch(SQLException e) {
-			System.err.println("Error database connection: " + e);
-		}
+		this.con.close();
 	}
 }
