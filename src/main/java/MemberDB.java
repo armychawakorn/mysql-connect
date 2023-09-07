@@ -14,7 +14,7 @@ public class MemberDB {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 	}
 	public MemberDB FindAll() throws SQLException {
-		List<List<String>> sql = new ArrayList<List<String>>();
+		List<List<String>> returnData = new ArrayList<List<String>>();
 		con = DriverManager.getConnection(dbURL, "root", "");
 		PreparedStatement pStatement = con.prepareStatement("SELECT * FROM member");
 		ResultSet resultSet = pStatement.executeQuery();
@@ -23,13 +23,13 @@ public class MemberDB {
 			for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
 				sqlData.add(resultSet.getString(i));
 			}
-			sql.add(sqlData);
+			returnData.add(sqlData);
 		}
-		DatabaseData = sql;
+		DatabaseData = returnData;
 		return this;
 	}
 	public MemberDB FindOne(String username) throws SQLException {
-		List<List<String>> sql = new ArrayList<List<String>>();
+		List<List<String>> returnData = new ArrayList<List<String>>();
 		con = DriverManager.getConnection(dbURL, "root", "");
 		PreparedStatement pStatement = con.prepareStatement("SELECT * FROM member WHERE username = ?");
 		pStatement.setString(1, username);
@@ -39,9 +39,9 @@ public class MemberDB {
 			for(int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
 				sqlData.add(resultSet.getString(i));
 			}
-			sql.add(sqlData);
+			returnData.add(sqlData);
 		}
-		DatabaseData = sql;
+		DatabaseData = returnData;
 		return this;
 	}
 	public void DisplayData() throws SQLException {
